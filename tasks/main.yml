@@ -1,16 +1,16 @@
 ---
 
-#- name: Create user for pokt
-#  user:
-#    name: "{{ pokt_user }}"
-#    home: "{{ pokt_user_path }}"
-#    shell: /bin/bash
-#
-#- name: Create pokt group.
-#  group:
-#    name: "{{ pokt_group }}"
+- name: Create user for pokt
+  user:
+    name: "{{ pokt_user }}"
+    home: "{{ pokt_user_path }}"
+    shell: /bin/bash
 
-#- include: account.yml
+- name: Create pokt group.
+  group:
+    name: "{{ pokt_group }}"
+
+- include: account.yml
 
 - include: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
