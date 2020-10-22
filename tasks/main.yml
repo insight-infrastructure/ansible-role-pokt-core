@@ -1,2 +1,19 @@
 ---
-# tasks file for ansible-role-pokt-core
+
+#- name: Create user for pokt
+#  user:
+#    name: "{{ pokt_user }}"
+#    home: "{{ pokt_user_path }}"
+#    shell: /bin/bash
+#
+#- name: Create pokt group.
+#  group:
+#    name: "{{ pokt_group }}"
+
+#- include: account.yml
+
+- include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- include: nginx.yml
+  when: enable_pokt_nginx

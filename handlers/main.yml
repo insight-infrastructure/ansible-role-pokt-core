@@ -1,2 +1,16 @@
 ---
-# handlers file for ansible-role-pokt-core
+
+- name: reload systemctl
+  command: systemctl daemon-reload
+
+- name: restart pokt
+  service:
+    name: pokt
+    state: restarted
+    enabled: yes
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes

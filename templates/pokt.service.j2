@@ -1,0 +1,16 @@
+[Unit]
+Description=Pokt Core Daemon
+
+[Service]
+User={{ pokt_user }}
+Group={{ pokt_group }}
+Type=simple
+ExecStart=pokt start
+
+KillSignal=SIGINT
+Restart=on-failure
+RestartSec=10s
+RuntimeDirectory={{ pokt_user_path }}
+
+[Install]
+WantedBy=multi-user.target

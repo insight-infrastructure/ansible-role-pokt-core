@@ -1,0 +1,10 @@
+---
+
+- name: Copy over the account file
+  copy:
+    src: "{{ keystore_path }}"
+    dest: "{{ pokt_user_path }}/{{ keystore_path | basename }}"
+    mode: "0600"
+    owner: "{{ pokt_user }}"
+    group: "{{ pokt_group }}"
+  when: keystore_path is defined

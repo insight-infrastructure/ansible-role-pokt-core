@@ -1,0 +1,49 @@
+---
+
+#- name: Install required packages
+#  apt:
+#    name: "{{ packages }}"
+#    force_apt_get: yes
+#    state: latest
+#    update_cache: yes
+#  vars:
+#    packages:
+#      - software-properties-common
+#      - apt-transport-https
+#      - ca-certificates
+#      - gnupg-agent
+#      - linux-aws
+#      - build-essential
+#      - file
+#      - git
+#      - curl
+
+#- include_role:
+#    name: markosamuli.linuxbrew
+
+- name:
+  shell: |
+    git clone https://github.com/Homebrew/brew {{ pokt_user_path }}/.linuxbrew/Homebrew
+    mkdir {{ pokt_user_path }}/.linuxbrew/bin
+    ln -s {{ pokt_user_path }}/.linuxbrew/Homebrew/bin/brew {{ pokt_user_path }}/.linuxbrew/bin
+    eval $({{ pokt_user_path }}/.linuxbrew/bin/brew shellenv)
+
+- name: Install brew tap
+  shell: brew tap pokt-network/pocket-core
+  become: true
+  become_user: pokt
+
+
+- name: Install brew dependencies
+  shell: brew install pokt-network/pocket-core/pocket
+
+- name: Create pokt systemd service
+  template:
+    src: "pokt.service.j2"
+    dest: "{{ pokt_service }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload systemctl
+    - restart pokt

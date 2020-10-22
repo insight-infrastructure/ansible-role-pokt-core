@@ -1,0 +1,41 @@
+---
+
+- name: Run certbot for SSL
+  include_role:
+    name: geerlingguy.certbot
+  vars:
+    certbot_create_if_missing: true
+    certbot_admin_email: "{{ certbot_admin_email }}"
+    certbot_certs:
+      - domains:
+          - "{{ fqdn }}"
+    certbot_create_standalone_stop_services: []
+  when: enable_pokt_ssl
+
+- include_role:
+    name: geerlingguy.nginx
+
+- name: Copy over nginx conf for SSL
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+
+- name: Copy over pokt nginx conf for SSL
+  template:
+    src: pokt.conf.j2
+    dest: /etc/nginx/sites-enabled/pokt.conf
+  when: enable_pokt_ssl
+  notify:
+    - restart nginx
+
+- name: Copy over pokt nginx conf for non-SSL
+  template:
+    src: pokt.conf.no-ssl.j2
+    dest: /etc/nginx/nginx.conf
+  when: not enable_pokt_ssl
+  notify:
+    - restart nginx
+
+- name: Flush handlers in case any configs have changed.
+  meta: flush_handlers
+

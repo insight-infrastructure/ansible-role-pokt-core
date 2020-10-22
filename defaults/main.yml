@@ -1,2 +1,13 @@
 ---
-# defaults file for ansible-role-pokt-core
+
+pokt_user: pokt
+pokt_group: pokt
+pokt_user_path: /home/pokt
+
+linuxbrew_use_installer: true
+
+enable_pokt_nginx: true
+enable_pokt_ssl: "{{ domain_name is defined }}"
+
+fqdn: pokt.example.com
+certbot_admin_email: "admin@{{ fqdn }}"
